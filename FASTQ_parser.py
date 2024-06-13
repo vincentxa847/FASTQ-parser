@@ -40,7 +40,7 @@ class BLOCK:
         self.bad = False
         self.GC_Content_percent = 0
         self.NumberOfMissingBase = 0
-        self.total_score = 0
+        self.quality_score = 0
 
     def __str__(self):
         return f'sequence in {self.file}'
@@ -58,11 +58,11 @@ class BLOCK:
             print(f"{self.file} {self.id} {self.NumberOfMissingBase} {self.GC_Content_percent}")
         self.NumberOfMissingBase = 0
         self.GC_Content_percent = 0
-        self.total_score = 0
+        self.quality_score = 0
 
 
     def fastawrite(self):
-        if (self.bad == False) and (self.total_score > int(args.quality_filter)):
+        if (self.bad == False) and (self.quality_score > int(args.quality_filter)):
             FASTA.write(f'> {self.id}\n{self.sequence}\n')
 
 
@@ -237,7 +237,7 @@ class BLOCK:
                 for i in Forthline:  # take the quality value from forth line
                     score = ord(i)
                     total_score += score
-                self.total_score += total_score
+                self.quality_score = total_score/len(Forthline)
                 break
         else:
             if not self.bad:
