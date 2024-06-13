@@ -19,12 +19,11 @@ class FASTQ:
         self.information.append(SequenceObject)
 
     def storeFastqtoList(self):
-        lineInFile = []
         lineWithoutNewlineCharacter = []
-        fastq = open(self.name, 'r')  # open to store all the lines in a list
-        for k in range(FASTQ.linenumber(self)):
-            lineInFile.append(fastq.readline())
-        fastq.close()
+
+        with open(self.name, 'r') as fastq:  # open to store all the lines in a list and count the number of lines
+            lineInFile = fastq.readlines()
+
         self.linenumber = (len(lineInFile))
         for i in lineInFile:
             lineWithoutNewlineCharacter.append(i.rstrip()) # remove the newline character
