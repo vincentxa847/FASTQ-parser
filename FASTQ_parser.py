@@ -10,6 +10,7 @@ class FASTQ:
     def __init__(self, name):
         self.information = []  # store sequence object
         self.name = name
+        self.linenumber = 0
 
     def __str__(self):
         return f'FASTQ name = {self.name} '
@@ -17,19 +18,14 @@ class FASTQ:
     def Add_sequence(self):  # add the sequence object into FASTQ file object
         self.information.append(SequenceObject)
 
-    def linenumber(self):
-        fastq = open(self.name, 'r')  # i itself is a string so the name put in would also be string
-        linenumber= len(fastq.readlines())  # count how many lines in a file
-        fastq.close()
-        return linenumber
-
     def storeFastqtoList(self):
         lineInFile = []
         lineWithoutNewlineCharacter = []
-        fastq = open(self.name, 'r')  # reopen to store all the lines in a list
+        fastq = open(self.name, 'r')  # open to store all the lines in a list
         for k in range(FASTQ.linenumber(self)):
             lineInFile.append(fastq.readline())
         fastq.close()
+        self.linenumber = (len(lineInFile))
         for i in lineInFile:
             lineWithoutNewlineCharacter.append(i.rstrip()) # remove the newline character
         return lineWithoutNewlineCharacter
@@ -265,13 +261,13 @@ for i in args.fastq:
     try:
         FileObject = FASTQ(i)  # for each fastaq file, create a file object
         fastq = open(i, 'r')  # reopen to store all the lines in a list
-        lineInFile = FASTQ.storeFastqtoList(self=FileObject)
+        lineInFile = FASTQ.storeFastqtoList(self=FileObject) # count line number here
         FASTAName = str(i).replace('fastq', 'fasta')
         FASTA = open(FASTAName, 'w')
         currentBlock = 0
         SequenceObject = BLOCK(i, currentBlock)
         try:
-            while currentBlock <= FASTQ.linenumber(self=FileObject):  # iterate through every line in file
+            while currentBlock <= FileObject.linenumber:  # iterate through every line in file
                 BLOCK.identifier(self=SequenceObject)
                 BLOCK.missing_base_AND_GC_content(self=SequenceObject)
                 BLOCK.line3(self=SequenceObject)
@@ -281,7 +277,7 @@ for i in args.fastq:
                 BLOCK.fastawrite(self=SequenceObject)
                 BLOCK.blockInformationPrintAndResetValue(self=SequenceObject)
                 BLOCK.resetBlockCondition(self=SequenceObject)
-                if currentBlock >= FASTQ.linenumber(self=FileObject):
+                if currentBlock >= FileObject.linenumber:
                     break
             FASTA.close()
         except IndexError:
