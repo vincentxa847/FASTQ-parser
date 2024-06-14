@@ -13,7 +13,7 @@
 ## Running
 The script can be run as follows, allowing user to apply a quality filter to remove low-quality sequences :
 ```
- python <program>.py file1.fastq file2.fastq ...--quality_filter=45
+ python FASTQ_parser.py file1.fastq file2.fastq ...--quality_filter=45
 ```
 ## Requirement
 Codes is tested to work under
